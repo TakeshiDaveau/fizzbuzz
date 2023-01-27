@@ -64,14 +64,14 @@ const convertToFizzBuzzValue = (value: number): FizzBuzzType => {
   return value.toString();
 };
 
-export const fizzBuzzCompressed = (): FizzBuzzType[] => {
+export const fizzBuzzCompact = (): FizzBuzzType[] => {
   return Array(100)
     .fill(undefined)
     .map((v, i) => convertToFizzBuzzValue(i + 1));
 };
 
 // Extra Compressed
-export const fizzBuzzExtraCompressed = (): FizzBuzzType[] => {
+export const fizzBuzzExtraCompact = (): FizzBuzzType[] => {
   return Array(100)
     .fill(undefined)
     .map((v, index) =>
@@ -86,17 +86,61 @@ export const fizzBuzzExtraCompressed = (): FizzBuzzType[] => {
 };
 
 // Extra Compressed
-export const fizzBuzzExtraCompressedOptimized = (): FizzBuzzType[] => {
+export const fizzBuzzExtraCompactOptimized = (): FizzBuzzType[] => {
   let value: number;
+  let isBuzz: boolean;
+  let isFizz: boolean;
   return Array(100)
     .fill(undefined)
     .map((v, index) =>
-      (value = index + 1) && value % 3 === 0 && value % 5 === 0
+      (value = index + 1) &&
+      (isFizz = value % 3 === 0) &&
+      (isBuzz = value % 5 === 0) &&
+      isBuzz &&
+      isFizz
         ? 'FizzBuzz'
-        : value % 3 === 0
+        : isFizz
         ? 'Fizz'
         : value % 5 === 0
         ? 'Buzz'
         : value.toString()
     );
+};
+
+// ---------
+// STAGE 2
+// ---------
+type FizzBuzzStage2Type =
+  | FizzBuzzType
+  | 'FizzBuzzBuzz'
+  | 'FizzBuzzFizz'
+  | 'FizzBuzzFizzBuzz';
+
+export const fizzBuzzStage2 = (): FizzBuzzStage2Type[] => {
+  const result: FizzBuzzStage2Type[] = [];
+  for (let i = 1; i <= 100; i++) {
+    let valueToDisplay: FizzBuzzStage2Type = '';
+    let isFizz = isMultipleOfThree(i);
+    let isBuzz = isMultipleOfFive(i);
+    if (isFizz && isBuzz) {
+      valueToDisplay += 'FizzBuzz';
+    } else if (isBuzz) {
+      valueToDisplay += 'Buzz';
+    } else if (isFizz) {
+      valueToDisplay += 'Fizz';
+    }
+
+    isFizz = i.toString().includes('3');
+    isBuzz = i.toString().includes('5');
+    if (isFizz && isBuzz) {
+      valueToDisplay += 'FizzBuzz';
+    } else if (isBuzz) {
+      valueToDisplay += 'Buzz';
+    } else if (isFizz) {
+      valueToDisplay += 'Fizz';
+    }
+
+    result.push(valueToDisplay === '' ? i.toString() : valueToDisplay);
+  }
+  return result;
 };
